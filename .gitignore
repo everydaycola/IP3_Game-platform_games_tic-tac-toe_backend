@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### containers ###
+/infrastructure/idp_mysql_data/
+/infrastructure/postgresql/

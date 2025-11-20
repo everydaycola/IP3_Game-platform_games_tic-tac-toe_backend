@@ -1,7 +1,7 @@
 package be.kdg.ipj3.tictactoebackend.domain;
 
 public enum Cell {
-    Empty(' ', (byte) 0),
+    EMPTY('_', (byte) 0),
     X('X', (byte) 1),
     O('O', (byte) -1);
 

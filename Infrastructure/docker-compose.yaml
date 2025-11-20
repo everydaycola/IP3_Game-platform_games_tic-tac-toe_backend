@@ -17,6 +17,20 @@ services:
       - ./postgresql/data:/var/lib/postgresql
       - ./init-scripts/sql:/docker-entrypoint-initdb.d/
 
+  idp_mysql:
+    image: mysql:9.0.1
+    volumes:
+      - ./idp_mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: 'keycloak'
+      MYSQL_USER: 'keycloak'
+      MYSQL_PASSWORD: 'password'
+    ports:
+      - '3307:3306'
+    networks:
+      - kc
+
   idp_keycloak:
     image: quay.io/keycloak/keycloak:26.3
     environment:
