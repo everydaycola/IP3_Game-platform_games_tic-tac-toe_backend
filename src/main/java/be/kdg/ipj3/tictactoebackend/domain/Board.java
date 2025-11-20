@@ -18,4 +18,12 @@ public class Board {
         }
         state[x][y] = cell;
     }
+
+    public Cell[][] getState() {
+        return state;
+    }
+
+    public PlayerId getAtTurn() {
+        return atTurn;
+    }
 }
