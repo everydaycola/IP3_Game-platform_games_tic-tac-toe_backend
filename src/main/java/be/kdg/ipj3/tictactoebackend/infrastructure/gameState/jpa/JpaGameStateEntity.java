@@ -18,7 +18,7 @@ import java.util.UUID;
     private JpaGameCharacterEntity player1;
     @OneToOne() @JoinColumn(name = "player2_id")
     private JpaGameCharacterEntity player2;
-    @Column private UUID atTurn;
+    @Column private boolean isPlayerOneTurn;
 
     protected JpaGameStateEntity() {
     }
@@ -29,7 +29,7 @@ import java.util.UUID;
                 gameState.getState(),
                 player1,
                 player2,
-                gameState.getAtTurn().id()
+                gameState.getIsPlayerOneTurn()
         );
     }
 
@@ -39,7 +39,7 @@ import java.util.UUID;
                 this.state,
                 new CharacterId(this.player1.getId()),
                 new CharacterId(this.player2.getId()),
-                new CharacterId(this.atTurn)
+                this.isPlayerOneTurn
         );
     }
 }

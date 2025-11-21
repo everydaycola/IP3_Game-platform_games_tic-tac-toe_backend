@@ -9,15 +9,15 @@ public record GameStateDtoChar(
         Character[][] board,
         UUID player1,
         UUID player2,
-        UUID atTurn
+        boolean atTurn
 ) {
     public static GameStateDtoChar from(GameState gameState) {
         return new GameStateDtoChar(
                 gameState.getId().id(),
                 gameState.getGameStateAsStrings(),
-                gameState.getPlayer1().id(),
-                gameState.getPlayer2().id(),
-                gameState.getAtTurn().id()
+                gameState.getPlayerOne().id(),
+                gameState.getPlayerTwo().id(),
+                gameState.getIsPlayerOneTurn()
         );
     }
 }

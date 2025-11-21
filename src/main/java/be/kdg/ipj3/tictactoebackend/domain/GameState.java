@@ -10,11 +10,11 @@ import java.util.Arrays;
 public class GameState {
     private final GameStateId id;
     private final Cell[][] state;
-    private CharacterId player1;
-    private CharacterId player2;
-    private CharacterId atTurn;
+    private CharacterId playerOne;
+    private CharacterId playerTwo;
+    private Boolean isPlayerOneTurn;
 
-    public GameState(CharacterId player1, CharacterId player2) {
+    public GameState(CharacterId playerOne, CharacterId playerTwo) {
         this.id = GameStateId.create();
         this.state = new Cell[3][3];
         for (int i = 0; i < 3; i++) {
@@ -22,20 +22,10 @@ public class GameState {
                 this.state[i][j] = Cell.EMPTY;
             }
         }
-        this.player1 = player1;
-        this.player2 = player2;
+        this.playerOne = playerOne;
+        this.playerTwo = playerTwo;
         // hardcoded, player 1 always starts
-        this.atTurn = player1;
-    }
-
-    public void place(int x, int y, Cell cell) {
-        if (state[x][y] != Cell.EMPTY) {
-            throw new IllegalStateException("Cell is not empty");
-        }
-        if (cell == Cell.EMPTY) {
-            throw new IllegalArgumentException("You cannot place an empty cell");
-        }
-        state[x][y] = cell;
+        this.isPlayerOneTurn = true;
     }
 
     public Integer[][] getGameStateForAI() {
@@ -56,4 +46,27 @@ public class GameState {
                 .toArray(Character[][]::new);
     }
 
+    public void makeMove(int x, int y, Cell symbol) {
+        if (this.state[x][y] != Cell.EMPTY) {
+            throw new IllegalStateException("This cell is already occupied");
+        }
+        this.state[x][y] = symbol;
+        this.isPlayerOneTurn = !this.isPlayerOneTurn;
+    }
+
+    public void checkTurn(CharacterId playerId) {
+        if (this.isPlayerOneTurn ? !this.playerOne.equals(playerId) : !this.playerTwo.equals(playerId)) {
+            throw new IllegalStateException("It is not your turn");
+        }
+    }
+
+    public Cell getSymbol(CharacterId playerId) {
+        if (this.playerOne.equals(playerId)) {
+            return Cell.X;
+        } else if (this.playerTwo.equals(playerId)) {
+            return Cell.O;
+        } else {
+            throw new IllegalArgumentException("You are not in the game");
+        }
+    }
 }

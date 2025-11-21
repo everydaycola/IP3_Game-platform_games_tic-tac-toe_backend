@@ -26,8 +26,8 @@ public class DbGameStateRepository implements GameStateRepository {
     @Override
     public void save(GameState gameState) {
         log.info("Saving game state to database");
-        final var player1Id = gameState.getPlayer1();
-        final var player2Id = gameState.getPlayer2();
+        final var player1Id = gameState.getPlayerOne();
+        final var player2Id = gameState.getPlayerTwo();
         final var player1Jpa = userRepository.findById(player1Id.id()).orElseThrow(player1Id::notFound);
         final var player2Jpa = userRepository.findById(player2Id.id()).orElseThrow(player2Id::notFound);
         gameStateRepository.save(JpaGameStateEntity.fromDomain(gameState, player1Jpa, player2Jpa));

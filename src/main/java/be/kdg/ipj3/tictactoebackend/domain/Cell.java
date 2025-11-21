@@ -14,5 +14,4 @@ import lombok.Getter;
         this.name = name;
         this.aiValue = aiValue;
     }
-
 }

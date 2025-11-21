@@ -2,10 +2,59 @@
 @user2=7ad223bd-bf5e-4945-8284-3a9c81e4e7a9
 
 
+### starting a new match
 POST http://localhost:8080/api/matches/
 Content-Type: application/json
 
 {
   "player1": "{{user1}}",
   "player2": "{{user2}}"
+}
+
+> {%
+    client.global.set("gameId", response.body.id);
+%}
+
+### getting match
+GET http://localhost:8080/api/matches/{{gameId}}
+
+
+### making a move
+PATCH http://localhost:8080/api/matches/{{gameId}}
+Content-Type: application/json
+
+{
+  "x": 0,
+  "y": 1,
+  "player": "{{user1}}"
+}
+
+### making a counter move
+PATCH http://localhost:8080/api/matches/{{gameId}}
+Content-Type: application/json
+
+{
+  "x": 0,
+  "y": 2,
+  "player": "{{user2}}"
+}
+
+### making a move (not your turn)
+PATCH http://localhost:8080/api/matches/{{gameId}}
+Content-Type: application/json
+
+{
+  "x": 1,
+  "y": 1,
+  "player": "{{user2}}"
+}
+
+### making a move (occupied spot)
+PATCH http://localhost:8080/api/matches/{{gameId}}
+Content-Type: application/json
+
+{
+  "x": 0,
+  "y": 1,
+  "player": "{{user1}}"
 }
