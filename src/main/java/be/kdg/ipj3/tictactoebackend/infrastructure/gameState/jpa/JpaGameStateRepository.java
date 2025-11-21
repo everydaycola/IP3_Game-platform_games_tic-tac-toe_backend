@@ -1,4 +1,4 @@
-package be.kdg.ipj3.tictactoebackend.infrastructure.jpa;
+package be.kdg.ipj3.tictactoebackend.infrastructure.gameState.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

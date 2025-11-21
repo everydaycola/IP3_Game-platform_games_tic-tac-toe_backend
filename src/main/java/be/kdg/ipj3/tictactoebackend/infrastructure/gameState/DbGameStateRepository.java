@@ -1,0 +1,41 @@
+package be.kdg.ipj3.tictactoebackend.infrastructure.gameState;
+
+import be.kdg.ipj3.tictactoebackend.domain.GameState;
+import be.kdg.ipj3.tictactoebackend.domain.GameStateId;
+import be.kdg.ipj3.tictactoebackend.domain.GameStateRepository;
+import be.kdg.ipj3.tictactoebackend.infrastructure.gameState.jpa.JpaGameStateEntity;
+import be.kdg.ipj3.tictactoebackend.infrastructure.gameState.jpa.JpaGameStateRepository;
+import be.kdg.ipj3.tictactoebackend.infrastructure.user.jpa.JpaGameCharacterRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+@Slf4j
+@Repository
+public class DbGameStateRepository implements GameStateRepository {
+
+    private final JpaGameStateRepository gameStateRepository;
+    private final JpaGameCharacterRepository userRepository;
+
+    public DbGameStateRepository(JpaGameStateRepository gameStateRepository, JpaGameCharacterRepository userRepository) {
+        this.gameStateRepository = gameStateRepository;
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public void save(GameState gameState) {
+        log.info("Saving game state to database");
+        final var player1Id = gameState.getPlayer1();
+        final var player2Id = gameState.getPlayer2();
+        final var player1Jpa = userRepository.findById(player1Id.id()).orElseThrow(player1Id::notFound);
+        final var player2Jpa = userRepository.findById(player2Id.id()).orElseThrow(player2Id::notFound);
+        gameStateRepository.save(JpaGameStateEntity.fromDomain(gameState, player1Jpa, player2Jpa));
+    }
+
+    @Override public Optional<GameState> get(GameStateId stateId) {
+        log.info("Getting game state from database");
+
+        return gameStateRepository.findById(stateId.id()).map(JpaGameStateEntity::toDomain);
+    }
+}

@@ -10,9 +10,11 @@ import java.util.Arrays;
 public class GameState {
     private final GameStateId id;
     private final Cell[][] state;
-    private PlayerId atTurn;
+    private CharacterId player1;
+    private CharacterId player2;
+    private CharacterId atTurn;
 
-    public GameState() {
+    public GameState(CharacterId player1, CharacterId player2) {
         this.id = GameStateId.create();
         this.state = new Cell[3][3];
         for (int i = 0; i < 3; i++) {
@@ -20,6 +22,10 @@ public class GameState {
                 this.state[i][j] = Cell.EMPTY;
             }
         }
+        this.player1 = player1;
+        this.player2 = player2;
+        // hardcoded, player 1 always starts
+        this.atTurn = player1;
     }
 
     public void place(int x, int y, Cell cell) {

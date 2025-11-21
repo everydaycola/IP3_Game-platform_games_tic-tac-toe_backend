@@ -1,6 +1,8 @@
 package be.kdg.ipj3.tictactoebackend.domain;
 
-public enum Cell {
+import lombok.Getter;
+
+@Getter public enum Cell {
     EMPTY('_', (byte) 0),
     X('X', (byte) 1),
     O('O', (byte) -1);
@@ -13,11 +15,4 @@ public enum Cell {
         this.aiValue = aiValue;
     }
 
-    public char getName() {
-        return name;
-    }
-
-    public byte getAiValue() {
-        return aiValue;
-    }
 }

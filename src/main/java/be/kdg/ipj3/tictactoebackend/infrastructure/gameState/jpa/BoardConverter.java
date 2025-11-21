@@ -1,4 +1,4 @@
-package be.kdg.ipj3.tictactoebackend.infrastructure.jpa;
+package be.kdg.ipj3.tictactoebackend.infrastructure.gameState.jpa;
 
 import be.kdg.ipj3.tictactoebackend.domain.Cell;
 import jakarta.persistence.AttributeConverter;

@@ -1,17 +1,17 @@
 package be.kdg.ipj3.tictactoebackend.domain.achievement;
 
-import be.kdg.ipj3.tictactoebackend.domain.PlayerId;
+import be.kdg.ipj3.tictactoebackend.domain.CharacterId;
 
 import java.time.LocalDateTime;
 
 public class AchievementCompletion {
     private final AchievementId achievementId;
-    private final PlayerId playerId;
+    private final CharacterId characterId;
     private LocalDateTime completionTime;
 
-    public AchievementCompletion(LocalDateTime completionTime, PlayerId playerId, AchievementId achievementId) {
+    public AchievementCompletion(LocalDateTime completionTime, CharacterId characterId, AchievementId achievementId) {
         this.completionTime = completionTime;
-        this.playerId = playerId;
+        this.characterId = characterId;
         this.achievementId = achievementId;
     }
 }
