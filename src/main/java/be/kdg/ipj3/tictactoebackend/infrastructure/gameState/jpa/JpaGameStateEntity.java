@@ -19,6 +19,8 @@ import java.util.UUID;
     @OneToOne() @JoinColumn(name = "player2_id")
     private JpaGameCharacterEntity player2;
     @Column private boolean isPlayerOneTurn;
+    @Column private UUID winner;
+    @Column private boolean isDraw;
 
     protected JpaGameStateEntity() {
     }
@@ -26,10 +28,12 @@ import java.util.UUID;
     public static JpaGameStateEntity fromDomain(GameState gameState, JpaGameCharacterEntity player1, JpaGameCharacterEntity player2) {
         return new JpaGameStateEntity(
                 gameState.getId().id(),
-                gameState.getState(),
+                gameState.getBoard(),
                 player1,
                 player2,
-                gameState.getIsPlayerOneTurn()
+                gameState.getIsPlayerOneTurn(),
+                gameState.getWinner().id(),
+                gameState.isDraw()
         );
     }
 
@@ -39,7 +43,9 @@ import java.util.UUID;
                 this.state,
                 new CharacterId(this.player1.getId()),
                 new CharacterId(this.player2.getId()),
-                this.isPlayerOneTurn
+                this.isPlayerOneTurn,
+                new CharacterId(this.winner),
+                this.isDraw
         );
     }
 }
