@@ -1,6 +1,7 @@
 package be.kdg.ipj3.tictactoebackend.api.dtos;
 
 import be.kdg.ipj3.tictactoebackend.domain.GameState;
+import be.kdg.ipj3.tictactoebackend.domain.GameStatus;
 
 import java.util.UUID;
 
@@ -9,7 +10,9 @@ public record GameStateDtoChar(
         Character[][] board,
         UUID player1,
         UUID player2,
-        boolean atTurn
+        boolean atTurn,
+        GameStatus status,
+        UUID winner
 ) {
     public static GameStateDtoChar from(GameState gameState) {
         return new GameStateDtoChar(
@@ -17,7 +20,9 @@ public record GameStateDtoChar(
                 gameState.getGameStateAsStrings(),
                 gameState.getPlayerOne().id(),
                 gameState.getPlayerTwo().id(),
-                gameState.getIsPlayerOneTurn()
+                gameState.getIsPlayerOneTurn(),
+                gameState.getStatus(),
+                gameState.getWinner() == null ? null : gameState.getWinner().id()
         );
     }
 }

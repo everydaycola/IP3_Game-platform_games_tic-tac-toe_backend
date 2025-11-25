@@ -1,9 +1,6 @@
 package be.kdg.ipj3.tictactoebackend.infrastructure.gameState.jpa;
 
-import be.kdg.ipj3.tictactoebackend.domain.Cell;
-import be.kdg.ipj3.tictactoebackend.domain.GameState;
-import be.kdg.ipj3.tictactoebackend.domain.GameStateId;
-import be.kdg.ipj3.tictactoebackend.domain.CharacterId;
+import be.kdg.ipj3.tictactoebackend.domain.*;
 import be.kdg.ipj3.tictactoebackend.infrastructure.user.jpa.JpaGameCharacterEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,13 +11,13 @@ import java.util.UUID;
 @AllArgsConstructor @Entity @Getter @Table(name = "game_state") public class JpaGameStateEntity {
     @Id private UUID id;
     @Column @Convert(converter = BoardConverter.class) private Cell[][] state;
-    @OneToOne() @JoinColumn(name = "player1_id")
+    @ManyToOne() @JoinColumn(name = "player1_id")
     private JpaGameCharacterEntity player1;
-    @OneToOne() @JoinColumn(name = "player2_id")
+    @ManyToOne() @JoinColumn(name = "player2_id")
     private JpaGameCharacterEntity player2;
     @Column private boolean isPlayerOneTurn;
+    @Column private GameStatus status;
     @Column private UUID winner;
-    @Column private boolean isDraw;
 
     protected JpaGameStateEntity() {
     }
@@ -32,8 +29,8 @@ import java.util.UUID;
                 player1,
                 player2,
                 gameState.getIsPlayerOneTurn(),
-                gameState.getWinner().id(),
-                gameState.isDraw()
+                gameState.getStatus(),
+                gameState.getWinner() == null ? null : gameState.getWinner().id()
         );
     }
 
@@ -44,8 +41,8 @@ import java.util.UUID;
                 new CharacterId(this.player1.getId()),
                 new CharacterId(this.player2.getId()),
                 this.isPlayerOneTurn,
-                new CharacterId(this.winner),
-                this.isDraw
+                this.status,
+                new CharacterId(this.winner)
         );
     }
 }

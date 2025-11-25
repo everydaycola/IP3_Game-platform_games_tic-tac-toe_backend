@@ -13,8 +13,8 @@ public class GameState {
     private CharacterId playerOne;
     private CharacterId playerTwo;
     private Boolean isPlayerOneTurn;
+    private GameStatus status;
     private CharacterId winner;
-    private boolean isDraw;
 
     public GameState(CharacterId playerOne, CharacterId playerTwo) {
         this.id = GameStateId.create();
@@ -28,8 +28,7 @@ public class GameState {
         this.playerTwo = playerTwo;
         // hardcoded, player 1 always starts
         this.isPlayerOneTurn = true;
-        this.winner = null;
-        this.isDraw = false;
+        this.status = GameStatus.IN_PROGRESS;
     }
 
     public Integer[][] getGameStateForAI() {
@@ -50,7 +49,7 @@ public class GameState {
                 .toArray(Character[][]::new);
     }
 
-    public void setCell(int x, int y, Cell cell) {
+    private void setCell(int x, int y, Cell cell) {
         if (x < 0 || x >= 3 || y < 0 || y >= 3) {
             throw new IllegalArgumentException("Coordinates out of bounds");
         }
@@ -61,16 +60,14 @@ public class GameState {
     }
 
     public void makeMove(int x, int y, Cell symbol) {
-        if (winner != null || isDraw) {
-            throw new IllegalStateException("Game is already over");
-        }
-
+        if (!this.status.equals(GameStatus.IN_PROGRESS)) throw new IllegalStateException("Game is already over");
         setCell(x, y, symbol);
 
         if (hasWon(symbol)) {
+            this.status = GameStatus.WON;
             this.winner = this.isPlayerOneTurn ? this.playerOne : this.playerTwo;
         } else if (isFull()) {
-            this.isDraw = true;
+            this.status = GameStatus.DRAW;
         } else {
             this.isPlayerOneTurn = !this.isPlayerOneTurn;
         }
@@ -96,6 +93,7 @@ public class GameState {
     }
 
     public void checkTurn(CharacterId playerId) {
+        if (!this.status.equals(GameStatus.IN_PROGRESS)) throw new IllegalStateException("Game is already over");
         if (this.isPlayerOneTurn ? !this.playerOne.equals(playerId) : !this.playerTwo.equals(playerId)) {
             throw new IllegalStateException("It is not your turn");
         }
