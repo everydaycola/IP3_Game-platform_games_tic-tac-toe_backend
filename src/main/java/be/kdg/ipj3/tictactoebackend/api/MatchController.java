@@ -58,4 +58,11 @@ public class MatchController {
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
 
+    @PatchMapping("/{id}/ai")
+    public ResponseEntity<GameStateDtoChar> place(@PathVariable UUID id){
+        final var stateId = new GameStateId(id);
+        final var state = gameStateService.makeAiMove(stateId);
+        return ResponseEntity.ok(GameStateDtoChar.from(state));
+    }
+
 }

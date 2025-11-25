@@ -56,7 +56,7 @@ app.post('/api/tictactoe/ai-move', (req, res) => {
     // Simulate a slight delay (optional, makes it feel like AI is "thinking")
     setTimeout(() => {
         res.json(response);
-    }, 500);
+    },100 + Math.random() * 1000);
 });
 
 app.listen(port, () => {

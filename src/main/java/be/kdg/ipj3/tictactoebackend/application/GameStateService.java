@@ -55,9 +55,10 @@ public class GameStateService {
 
     public GameState getGameForPlayer(CharacterId playerId) {
         log.info("Getting game for player {}", playerId.id());
-        List<GameState> gameStates = gameStateRepository.getGameForPlayer(playerId).orElse(List.of());
+        final var gameStates = gameStateRepository.getGameForPlayer(playerId).orElse(List.of());
         if (gameStates.isEmpty()) throw new NotFoundException("No game found for player " + playerId.id());
-        if (gameStates.size() > 1) throw new IllegalStateException("More than one game found for player " + playerId.id());
+        if (gameStates.size() > 1)
+            throw new IllegalStateException("More than one game found for player " + playerId.id());
         return gameStates.getFirst();
     }
 
@@ -68,16 +69,17 @@ public class GameStateService {
         board.checkTurn(playerId);
         board.makeMove(x, y, symbol);
         gameStateRepository.save(board);
-        if (board.isAiGame()) {
-            makeAiMove(board);
-        }
         return board;
     }
 
-    private void makeAiMove(GameState state) {
+    public GameState makeAiMove(GameStateId stateId) {
         log.info("Making ai move");
-        aiCatalog.askForMove(GameStateDtoAI.from(state)).ifPresent(answer ->
-            state.makeMove(answer.col(), answer.row(), Cell.O)
-        );
+        final var board = gameStateRepository.get(stateId).orElseThrow(stateId::notFound);
+        board.checkTurn(aiUuid);
+        final var answer = aiCatalog.askForMove(GameStateDtoAI.from(board)).orElseThrow(() -> new IllegalStateException("Ai could not make a move"));
+        log.info("Ai move: ({}, {})", answer.row(), answer.col());
+        board.makeMove(answer.row(), answer.col(), Cell.O);
+        gameStateRepository.save(board);
+        return board;
     }
 }

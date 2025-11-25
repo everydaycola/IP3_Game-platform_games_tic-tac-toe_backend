@@ -5,12 +5,10 @@ import be.kdg.ipj3.tictactoebackend.infrastructure.gameState.ai.dtos.AiAnswerDto
 import be.kdg.ipj3.tictactoebackend.infrastructure.gameState.ai.dtos.GameStateDtoAI;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,13 +25,14 @@ public class ExternalAiCatalog implements AiCatalog {
         log.info("Asking the Ai to make a move");
         try {
             final var response = restClient
-                    .get()
+                    .post()
                     .uri("/ai-move")
+                    .body(gameStateDto)
                     .retrieve()
                     .body(AiAnswerDto.class);
 
             if (response == null) {
-                log.error("No restaurants found");
+                log.error("No ai response");
             }
 
             return Optional.ofNullable(response);
