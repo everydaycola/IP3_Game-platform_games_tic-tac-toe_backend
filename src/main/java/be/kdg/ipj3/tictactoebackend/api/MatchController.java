@@ -3,6 +3,7 @@ package be.kdg.ipj3.tictactoebackend.api;
 
 import be.kdg.ipj3.tictactoebackend.api.dtos.GameStateDtoChar;
 import be.kdg.ipj3.tictactoebackend.api.dtos.MoveDto;
+import be.kdg.ipj3.tictactoebackend.api.dtos.NewAiMatchDto;
 import be.kdg.ipj3.tictactoebackend.api.dtos.NewMatchDto;
 import be.kdg.ipj3.tictactoebackend.application.GameStateService;
 import be.kdg.ipj3.tictactoebackend.domain.GameStateId;
@@ -30,6 +31,14 @@ public class MatchController {
         final var player1Id = new CharacterId(newMatch.player1());
         final var player2Id = new CharacterId(newMatch.player2());
         final var state = gameStateService.createBoard(player1Id, player2Id);
+        return ResponseEntity.ok(GameStateDtoChar.from(state));
+    }
+
+    @PostMapping("/ai")
+    public ResponseEntity<GameStateDtoChar> startGame(@RequestBody NewAiMatchDto newMatch){
+        log.info("Starting a new game");
+        final var playerId = new CharacterId(newMatch.player());
+        final var state = gameStateService.createBoardAi(playerId);
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
 

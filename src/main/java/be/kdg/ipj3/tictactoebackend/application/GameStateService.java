@@ -1,11 +1,14 @@
 package be.kdg.ipj3.tictactoebackend.application;
 
 import be.kdg.ipj3.tictactoebackend.domain.*;
+import be.kdg.ipj3.tictactoebackend.infrastructure.gameState.ai.dtos.GameStateDtoAI;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -13,16 +16,28 @@ import java.util.List;
 public class GameStateService {
 
     private final GameStateRepository gameStateRepository;
+    private final AiCatalog aiCatalog;
+    private final CharacterId aiUuid;
 
-    public GameStateService(GameStateRepository gameStateRepository) {
+    public GameStateService(GameStateRepository gameStateRepository, AiCatalog aiCatalog, @Value("${game-state-service.ai-uuid}") final UUID aiId) {
         this.gameStateRepository = gameStateRepository;
+        this.aiCatalog = aiCatalog;
+        this.aiUuid = new CharacterId(aiId);
     }
 
     public GameState createBoard(CharacterId player1, CharacterId player2) {
         log.info("Creating new game board, match between {} and {}", player1.id(), player2.id());
         checkIfPlaying(player1);
         checkIfPlaying(player2);
-        final var board = new GameState(player1, player2);
+        final var board = new GameState(player1, player2, false);
+        gameStateRepository.save(board);
+        return board;
+    }
+
+    public GameState createBoardAi(CharacterId player) {
+        log.info("Creating new game board, match between {} and an AI", player.id());
+        checkIfPlaying(player);
+        final var board = new GameState(player, aiUuid, true);
         gameStateRepository.save(board);
         return board;
     }
@@ -53,6 +68,16 @@ public class GameStateService {
         board.checkTurn(playerId);
         board.makeMove(x, y, symbol);
         gameStateRepository.save(board);
+        if (board.isAiGame()) {
+            makeAiMove(board);
+        }
         return board;
+    }
+
+    private void makeAiMove(GameState state) {
+        log.info("Making ai move");
+        aiCatalog.askForMove(GameStateDtoAI.from(state)).ifPresent(answer ->
+            state.makeMove(answer.col(), answer.row(), Cell.O)
+        );
     }
 }

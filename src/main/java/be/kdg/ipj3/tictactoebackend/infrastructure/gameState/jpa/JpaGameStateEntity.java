@@ -18,6 +18,7 @@ import java.util.UUID;
     @Column private boolean isPlayerOneTurn;
     @Column private GameStatus status;
     @Column private UUID winner;
+    @Column private boolean isAiGame;
 
     protected JpaGameStateEntity() {
     }
@@ -30,7 +31,8 @@ import java.util.UUID;
                 player2,
                 gameState.getIsPlayerOneTurn(),
                 gameState.getStatus(),
-                gameState.getWinner() == null ? null : gameState.getWinner().id()
+                gameState.getWinner() == null ? null : gameState.getWinner().id(),
+                gameState.isAiGame()
         );
     }
 
@@ -42,7 +44,8 @@ import java.util.UUID;
                 new CharacterId(this.player2.getId()),
                 this.isPlayerOneTurn,
                 this.status,
-                new CharacterId(this.winner)
+                new CharacterId(this.winner),
+                this.isAiGame
         );
     }
 }

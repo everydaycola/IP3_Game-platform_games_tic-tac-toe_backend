@@ -15,8 +15,9 @@ public class GameState {
     private Boolean isPlayerOneTurn;
     private GameStatus status;
     private CharacterId winner;
+    private boolean isAiGame;
 
-    public GameState(CharacterId playerOne, CharacterId playerTwo) {
+    public GameState(CharacterId playerOne, CharacterId playerTwo, boolean isAiGame) {
         this.id = GameStateId.create();
         this.board = new Cell[3][3];
         for (int i = 0; i < 3; i++) {
@@ -29,6 +30,7 @@ public class GameState {
         // hardcoded, player 1 always starts
         this.isPlayerOneTurn = true;
         this.status = GameStatus.IN_PROGRESS;
+        this.isAiGame = isAiGame;
     }
 
     public Integer[][] getGameStateForAI() {

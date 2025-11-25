@@ -15,6 +15,18 @@ Content-Type: application/json
     client.global.set("gameId", response.body.id);
 %}
 
+### starting a new match against an ai
+POST http://localhost:8080/api/matches/ai
+Content-Type: application/json
+
+{
+  "player": "{{user1}}"
+}
+
+> {%
+    client.global.set("gameId", response.body.id);
+%}
+
 ### getting match
 GET http://localhost:8080/api/matches/{{gameId}}
 
@@ -24,7 +36,7 @@ PATCH http://localhost:8080/api/matches/{{gameId}}
 Content-Type: application/json
 
 {
-  "x": 2,
+  "x": 1,
   "y": 0,
   "player": "{{user1}}"
 }
