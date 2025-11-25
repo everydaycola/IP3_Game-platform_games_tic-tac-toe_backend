@@ -3,14 +3,14 @@ package be.kdg.ipj3.tictactoebackend.domain;
 import lombok.Getter;
 
 @Getter public enum Cell {
-    EMPTY('_', (byte) 0),
-    X('X', (byte) 1),
-    O('O', (byte) -1);
+    EMPTY('_', 0),
+    X('X', -1),
+    O('O', 1);
 
     private final char name;
-    private final byte aiValue;
+    private final int aiValue;
 
-    Cell(char name, byte aiValue) {
+    Cell(char name, int aiValue) {
         this.name = name;
         this.aiValue = aiValue;
     }

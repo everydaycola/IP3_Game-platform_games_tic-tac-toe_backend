@@ -3,6 +3,7 @@ package be.kdg.ipj3.tictactoebackend.api;
 
 import be.kdg.ipj3.tictactoebackend.api.dtos.GameStateDtoChar;
 import be.kdg.ipj3.tictactoebackend.api.dtos.MoveDto;
+import be.kdg.ipj3.tictactoebackend.api.dtos.NewAiMatchDto;
 import be.kdg.ipj3.tictactoebackend.api.dtos.NewMatchDto;
 import be.kdg.ipj3.tictactoebackend.application.GameStateService;
 import be.kdg.ipj3.tictactoebackend.domain.GameStateId;
@@ -33,6 +34,14 @@ public class MatchController {
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
 
+    @PostMapping("/ai")
+    public ResponseEntity<GameStateDtoChar> startGame(@RequestBody NewAiMatchDto newMatch){
+        log.info("Starting a new game");
+        final var playerId = new CharacterId(newMatch.player());
+        final var state = gameStateService.createBoardAi(playerId);
+        return ResponseEntity.ok(GameStateDtoChar.from(state));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<GameStateDtoChar> getGame(@PathVariable UUID id){
         log.info("Getting game with id {}", id);
@@ -46,6 +55,13 @@ public class MatchController {
         final var stateId = new GameStateId(id);
         final var playerId = new CharacterId(move.player());
         final var state = gameStateService.makeMove(move.x(), move.y(), playerId, stateId);
+        return ResponseEntity.ok(GameStateDtoChar.from(state));
+    }
+
+    @PatchMapping("/{id}/ai")
+    public ResponseEntity<GameStateDtoChar> place(@PathVariable UUID id){
+        final var stateId = new GameStateId(id);
+        final var state = gameStateService.makeAiMove(stateId);
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
 

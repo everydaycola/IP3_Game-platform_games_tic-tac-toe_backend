@@ -12,7 +12,8 @@ public record GameStateDtoChar(
         UUID player2,
         boolean atTurn,
         GameStatus status,
-        UUID winner
+        UUID winner,
+        boolean isAiGame
 ) {
     public static GameStateDtoChar from(GameState gameState) {
         return new GameStateDtoChar(
@@ -22,7 +23,8 @@ public record GameStateDtoChar(
                 gameState.getPlayerTwo().id(),
                 gameState.getIsPlayerOneTurn(),
                 gameState.getStatus(),
-                gameState.getWinner() == null ? null : gameState.getWinner().id()
+                gameState.getWinner() == null ? null : gameState.getWinner().id(),
+                gameState.isAiGame()
         );
     }
 }
