@@ -33,13 +33,13 @@ public class GameState {
         this.isAiGame = isAiGame;
     }
 
-    public Integer[][] getGameStateForAI() {
+    public String[][] getGameStateForAI() {
         return Arrays.stream(this.board)
                 .map(row -> Arrays.stream(row)
                         .map(Cell::getAiValue)
-                        .toArray(Integer[]::new)
+                        .toArray(String[]::new)
                 )
-                .toArray(Integer[][]::new);
+                .toArray(String[][]::new);
     }
 
     public Character[][] getGameStateAsStrings() {

@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = 8000;
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -56,7 +56,7 @@ app.post('/api/tictactoe/ai-move', (req, res) => {
     // Simulate a slight delay (optional, makes it feel like AI is "thinking")
     setTimeout(() => {
         res.json(response);
-    },100 + Math.random() * 1000);
+    },100 + Math.random() * 300);
 });
 
 app.listen(port, () => {
