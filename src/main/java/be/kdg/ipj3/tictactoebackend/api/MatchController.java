@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/matches")
+@RequestMapping("tic-tac-toe/api/matches")
 @Slf4j
 public class MatchController {
 
