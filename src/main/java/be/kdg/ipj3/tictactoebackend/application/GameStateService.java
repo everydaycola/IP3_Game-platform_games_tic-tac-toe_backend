@@ -25,15 +25,6 @@ public class GameStateService {
         this.aiUuid = new CharacterId(aiId);
     }
 
-    public GameState createBoard(CharacterId player1, CharacterId player2) {
-        log.info("Creating new game board, match between {} and {}", player1.id(), player2.id());
-        checkIfPlaying(player1);
-        checkIfPlaying(player2);
-        final var board = new GameState(player1, player2, false);
-        gameStateRepository.save(board);
-        return board;
-    }
-
     public GameState createBoardAi(CharacterId player) {
         log.info("Creating new game board, match between {} and an AI", player.id());
         checkIfPlaying(player);
