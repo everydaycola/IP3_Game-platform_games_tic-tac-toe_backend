@@ -3,7 +3,7 @@
 
 
 ### starting a new match
-POST http://localhost:8080/api/matches/
+POST http://localhost:8081/tic-tac-toe/api/matches/
 Content-Type: application/json
 
 {
@@ -16,7 +16,7 @@ Content-Type: application/json
 %}
 
 ### starting a new match against an ai
-POST http://localhost:8080/api/matches/ai
+POST http://localhost:8081/tic-tac-toe/api/matches/ai
 Content-Type: application/json
 
 {
@@ -28,13 +28,13 @@ Content-Type: application/json
 %}
 
 ### getting match
-GET http://localhost:8080/api/matches/{{gameId}}
+GET http://localhost:8081/tic-tac-toe/api/matches/{{gameId}}
 
 ### let the Ai move
-PATCH http://localhost:8080/api/matches/{{gameId}}/ai
+PATCH http://localhost:8081/tic-tac-toe/api/matches/{{gameId}}/ai
 
 ### making a move
-PATCH http://localhost:8080/api/matches/{{gameId}}
+PATCH http://localhost:8081/tic-tac-toe/api/matches/{{gameId}}
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 }
 
 ### making a counter move
-PATCH http://localhost:8080/api/matches/{{gameId}}
+PATCH http://localhost:8081/tic-tac-toe/api/matches/{{gameId}}
 Content-Type: application/json
 
 {
@@ -54,4 +54,4 @@ Content-Type: application/json
 }
 
 ### getting the active game for player 1
-GET http://localhost:8080/api/players/{{user1}}/playing
+GET http://localhost:8081/tic-tac-toe/api/players/{{user1}}/playing
