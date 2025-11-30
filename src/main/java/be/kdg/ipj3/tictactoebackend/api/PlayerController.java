@@ -24,7 +24,7 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}/playing")
-    public ResponseEntity<GameStateDtoChar> getGameForPlayer(@PathVariable UUID id){
+    public ResponseEntity<GameStateDtoChar> getGame(@PathVariable UUID id){
         log.info("Getting in_progress game per player {}", id);
         final var playerId = new CharacterId(id);
         final var state = gameStateService.getGameForPlayer(playerId);
