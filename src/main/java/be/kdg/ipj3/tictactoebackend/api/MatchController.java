@@ -2,12 +2,13 @@ package be.kdg.ipj3.tictactoebackend.api;
 
 import be.kdg.ipj3.tictactoebackend.api.dtos.GameStateDtoChar;
 import be.kdg.ipj3.tictactoebackend.api.dtos.MoveDto;
-import be.kdg.ipj3.tictactoebackend.api.dtos.NewAiMatchDto;
 import be.kdg.ipj3.tictactoebackend.application.GameStateService;
 import be.kdg.ipj3.tictactoebackend.domain.GameStateId;
 import be.kdg.ipj3.tictactoebackend.domain.CharacterId;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -23,10 +24,18 @@ public class MatchController {
         this.gameStateService = gameStateService;
     }
 
+    @GetMapping("/playing")
+    public ResponseEntity<GameStateDtoChar> getPlayingGame(@AuthenticationPrincipal Jwt token){
+        final var playerId = CharacterId.fromToken(token);
+        final var state = gameStateService.getGameForPlayer(playerId);
+        return ResponseEntity.ok(GameStateDtoChar.from(state));
+    }
+
+
     @PostMapping("/ai")
-    public ResponseEntity<GameStateDtoChar> startGame(@RequestBody NewAiMatchDto newMatch){
+    public ResponseEntity<GameStateDtoChar> startGame(@AuthenticationPrincipal Jwt token){
         log.info("Starting a new game");
-        final var playerId = new CharacterId(newMatch.player());
+        final var playerId = CharacterId.fromToken(token);
         final var state = gameStateService.createBoardAi(playerId);
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
@@ -40,15 +49,15 @@ public class MatchController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<GameStateDtoChar> place(@RequestBody MoveDto move, @PathVariable UUID id){
+    public ResponseEntity<GameStateDtoChar> place(@RequestBody MoveDto move, @PathVariable UUID id, @AuthenticationPrincipal Jwt token){
         final var stateId = new GameStateId(id);
-        final var playerId = new CharacterId(move.player());
+        final var playerId = CharacterId.fromToken(token);
         final var state = gameStateService.makeMove(move.x(), move.y(), playerId, stateId);
         return ResponseEntity.ok(GameStateDtoChar.from(state));
     }
 
     @PatchMapping("/{id}/ai")
-    public ResponseEntity<GameStateDtoChar> place(@PathVariable UUID id){
+    public ResponseEntity<GameStateDtoChar> letAiPlace(@PathVariable UUID id){
         final var stateId = new GameStateId(id);
         final var state = gameStateService.makeAiMove(stateId);
         return ResponseEntity.ok(GameStateDtoChar.from(state));

@@ -9,6 +9,11 @@
       "name": "game-state-service.ai-uuid",
       "type": "java.util.UUID",
       "description": "The uuid of the ai player seeded via dataseeder."
+    },
+    {
+      "name": "cors.allowed-origins",
+      "type": "java.util.UUID",
+      "description": "origins allowed for cross origin requests."
     }
   ]
 }

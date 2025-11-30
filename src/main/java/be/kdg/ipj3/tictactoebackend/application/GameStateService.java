@@ -16,17 +16,20 @@ import java.util.UUID;
 public class GameStateService {
 
     private final GameStateRepository gameStateRepository;
+    private final PlayerService playerService;
     private final AiCatalog aiCatalog;
     private final CharacterId aiUuid;
 
-    public GameStateService(GameStateRepository gameStateRepository, AiCatalog aiCatalog, @Value("${game-state-service.ai-uuid}") final UUID aiId) {
+    public GameStateService(GameStateRepository gameStateRepository, PlayerService playerService, AiCatalog aiCatalog, @Value("${game-state-service.ai-uuid}") final UUID aiId) {
         this.gameStateRepository = gameStateRepository;
+        this.playerService = playerService;
         this.aiCatalog = aiCatalog;
         this.aiUuid = new CharacterId(aiId);
     }
 
     public GameState createBoardAi(CharacterId player) {
         log.info("Creating new game board, match between {} and an AI", player.id());
+        playerService.getOrCreatePlayer(player);
         checkIfPlaying(player);
         final var board = new GameState(player, aiUuid, true);
         gameStateRepository.save(board);
