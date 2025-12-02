@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
 
 import java.util.Optional;
@@ -37,7 +38,10 @@ public class ExternalAiCatalog implements AiCatalog {
 
             return Optional.ofNullable(response);
         } catch (final HttpStatusCodeException e) {
-            log.error("Error while asking AI for a move", e);
+            log.error("Error while asking AI for a move: {}", e.getMessage());
+            return Optional.empty();
+        } catch (final ResourceAccessException e) {
+            log.error("AI service is unreachable: {}", e.getMessage());
             return Optional.empty();
         }
     }
