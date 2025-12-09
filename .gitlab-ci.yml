@@ -2,6 +2,7 @@ image: gradle:8.10-jdk21
 
 stages:
   - build
+  - quality-gate
   - docker-publish
 
 cache:
@@ -17,6 +18,25 @@ build:
     paths:
       - build/libs/*.jar
     expire_in: 1 hour
+
+megalinter:
+  stage: quality-gate
+  image: oxsecurity/megalinter-java:v7
+  script: ["true"]
+  variables:
+    DEFAULT_WORKSPACE: $CI_PROJECT_DIR
+    GITLAB_ACCESS_TOKEN_MEGALINTER: $ACCESS_TOKEN
+    DISABLE_ERRORS: true
+    VALIDATE_ALL_CODEBASE: false
+    DISABLE: YAML,SPELL,MARKDOWN,DOCKERFILE
+    APPLY_FIXES: none
+  artifacts:
+    when: always
+    expose_as: 'Quality Reports'
+    paths:
+      - megalinter-reports/
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
 
 docker-publish:
   image: docker:24.0.5-cli
