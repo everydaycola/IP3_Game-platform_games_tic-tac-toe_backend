@@ -45,7 +45,6 @@ docker-publish:
     - docker:24.0.5-dind
   dependencies:
     - build
-    - test
   before_script:
     - echo "$CI_REGISTRY_PASSWORD" | docker login $CI_REGISTRY -u $CI_REGISTRY_USER --password-stdin
   script:
