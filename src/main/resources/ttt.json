@@ -1,0 +1,16 @@
+{
+  "id": "19dd9398-0b25-4049-abe3-0a8577b0fd8e",
+  "name": "Tic Tac Toe",
+  "maxPlayerCount": 2,
+  "aiStartGameEndpoint": "http://localhost:8081/tic-tac-toe/api/matches/ai",
+  "startGameEndpoint": "http://localhost:8081/tic-tac-toe/api/matches",
+  "description": "A classic 2-player strategy game.",
+  "price": 19.98,
+  "image":"tictactoe.png",
+  "icon": "https://www.svgrepo.com/show/143264/tic-tac-toe-game.svg",
+  "genre": "Strategy",
+  "achievements": [
+  ],
+  "configurableSettings": {
+  }
+}

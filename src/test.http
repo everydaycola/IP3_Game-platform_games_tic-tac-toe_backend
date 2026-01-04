@@ -2,12 +2,12 @@
 @user2=7ad223bd-bf5e-4945-8284-3a9c81e4e7a9
 
 @ClientId=TTT-backend
-@ClientSecret=anh2BTvft5XQJSQgTsJZRYbn90IGgVS2
-@player1username=?
-@player1password=?
+@ClientSecret=YjKubFkS8JKWJDlMMaXPr0UPrSXbiRHi
+@player1username=123
+@player1password=123
 
 ### Get access token for player1
-POST http://localhost:8180/realms/keepdishesgoing/protocol/openid-connect/token HTTP/1.1
+POST http://localhost:8180/realms/FourteenGames/protocol/openid-connect/token HTTP/1.1
 Content-Type: application/x-www-form-urlencoded
 
 client_id={{ClientId}}&client_secret={{ClientSecret}}&username={{player1username}}&password={{player1password}}&grant_type=password&scope=openid
@@ -16,14 +16,25 @@ client_id={{ClientId}}&client_secret={{ClientSecret}}&username={{player1username
     client.global.set("access_token", response.body.access_token);
 %}
 
+
+### Starting a new match between player 1 and player 2
+POST http://localhost:8081/tic-tac-toe/api/matches
+Content-Type: application/json
+Authorization: Bearer {{access_token}}
+
+{
+  "player1Id": "{{user1}}",
+  "player2Id": "{{user2}}"
+}
+
+> {%
+    client.global.set("gameId", response.body.id);
+%}
+
 ### starting a new match against an ai
 POST http://localhost:8081/tic-tac-toe/api/matches/ai
 Content-Type: application/json
-Authorization: Bearer {{access_token_courier1}}
-
-{
-  "player": "{{user1}}"
-}
+Authorization: Bearer {{access_token}}
 
 > {%
     client.global.set("gameId", response.body.id);
