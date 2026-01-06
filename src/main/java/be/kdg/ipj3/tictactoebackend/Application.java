@@ -1,5 +1,6 @@
 package be.kdg.ipj3.tictactoebackend;
 
+import be.kdg.ipj3.tictactoebackend.config.RegistrationConfig;
 import be.kdg.ipj3.tictactoebackend.config.rabbitMq.RabbitMQProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-@EnableConfigurationProperties({RabbitMQProperties.class})
+@EnableConfigurationProperties({RabbitMQProperties.class, RegistrationConfig.class})
 @EnableScheduling
 public class Application {
 
