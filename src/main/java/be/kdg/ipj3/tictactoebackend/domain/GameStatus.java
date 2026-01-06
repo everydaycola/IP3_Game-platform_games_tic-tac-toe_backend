@@ -5,5 +5,6 @@ public enum GameStatus {
     IN_PROGRESS,
 //    FORFEIT,
     DRAW,
-    WON
+    WON,
+    ENDED
 }

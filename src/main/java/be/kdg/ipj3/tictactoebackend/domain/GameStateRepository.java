@@ -5,8 +5,6 @@ import java.util.Optional;
 
 public interface GameStateRepository {
     void save(GameState gameState);
-
     Optional<GameState> get(GameStateId stateId);
-
     Optional<List<GameState>> getGameForPlayer(CharacterId playerId);
 }

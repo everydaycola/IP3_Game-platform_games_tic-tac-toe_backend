@@ -74,6 +74,9 @@ public class GameState {
             this.isPlayerOneTurn = !this.isPlayerOneTurn;
         }
     }
+    public void setGameStatusEnded(){
+        this.status = GameStatus.ENDED;
+    }
 
     public boolean hasWon(Cell playerCell) {
         // Check rows and columns

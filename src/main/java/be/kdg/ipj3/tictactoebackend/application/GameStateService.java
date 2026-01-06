@@ -36,7 +36,7 @@ public class GameStateService {
         return board;
     }
 
-    public GameState createBoard(CharacterId player1, CharacterId player2){
+    public GameState createBoard(CharacterId player1, CharacterId player2) {
         log.info("Creating new game board, match between {} and {}", player1.id(), player2.id());
         playerService.getOrCreatePlayer(player1);
         playerService.getOrCreatePlayer(player2);
@@ -49,8 +49,15 @@ public class GameStateService {
 
     private void checkIfPlaying(CharacterId player) {
         final var playerGame = gameStateRepository.getGameForPlayer(player);
-        if (playerGame.isPresent() && !playerGame.get().isEmpty())
+        if (playerGame.isPresent() && !playerGame.get().isEmpty()) {
+            GameState currentPlayerGame = playerGame.get().getFirst();
+            if (playerGame.get().getFirst().isAiGame()) {
+                currentPlayerGame.setGameStatusEnded();
+                gameStateRepository.save(currentPlayerGame);
+                return;
+            }
             throw new IllegalStateException("Player " + player.id() + " already playing a game with id: " + playerGame.get().getFirst().getId().id());
+        }
     }
 
     public GameState getState(GameStateId stateId) {
